@@ -9,8 +9,6 @@ cam = CentralCamera('focal', 0.015,'pixel',10e-6, ...
 world = SE3();
 trplot(world,'frame','0','color','b');
 
-
-
 % plot camera
 cam.plot_camera();
 
@@ -60,6 +58,42 @@ vv1 = cam.K * rot(:,1);
 vv1 = vv1/vv1(3)
 vv2 = cam.K * rot(:,2);
 vv2 = vv2/vv2(3)
+vv3 = cam.K * rot(:,3);
+vv3 = vv3/vv3(3)
 rot
 r1 = (inv(cam.K)*vp1')/norm((inv(cam.K)*vp1'))
 r2 = (inv(cam.K)*vp2')/norm((inv(cam.K)*vp2'))
+r3 = cross(r1,r2)
+
+%% Calculate focal length
+
+vp_x = vv1;
+vp_y = vv2;
+vp_z = vv3;
+
+temp_1_x = vp_x(1)+vp_y(1);
+temp_2_x = vp_y(1)+vp_z(1);
+temp_3_x = vp_z(1)+vp_x(1);
+temp_1_y = vp_x(2)+vp_y(2);
+temp_2_y = vp_y(2)+vp_z(2);
+temp_3_y = vp_z(2)+vp_x(2);
+temp_xy = vp_x(1)*vp_y(1)+vp_x(2)*vp_y(2);
+temp_yz = vp_z(1)*vp_y(1)+vp_z(2)*vp_y(2);
+temp_xz = vp_x(1)*vp_z(1)+vp_x(2)*vp_z(2);
+
+%solve for image center ax+by+c=0
+syms u_0 v_0;
+[final_u, final_v] = solve(-(temp_1_x)*u_0 - (temp_1_y)*v_0 + temp_xy == -(temp_2_x)*u_0 -(temp_2_y)*v_0 + temp_yz,...
+-(temp_3_x)*u_0 - (temp_3_y)*v_0 + temp_xz == -(temp_2_x)*u_0 - (temp_2_y)*v_0 + temp_yz);
+
+u = double(final_u);
+v = double(final_v);
+%focal length solving
+eq_f = (u - vp_x(1))*(u - vp_y(1)) + (v - vp_x(2))*(v - vp_y(2));
+f = sqrt(-eq_f);
+f = double(f);
+
+
+K = [f      0       u;
+     0      f       v;
+     0      0       1]   
