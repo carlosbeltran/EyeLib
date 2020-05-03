@@ -1,70 +1,57 @@
 clear all; close all;
 
 %% Groundtruth
-vps_gt = [[1195.99492678  192.67503264]; ...
- [ 104.98138221   80.65389521]; ...
- [ 144.38825531 1614.68566071]];
+vps_gt = [[ 1195.99492678  192.67503264]; ...
+          [ 104.98138221   80.65389521]; ...
+          [ 144.38825531   1614.68566071]];
 
-K_gt = [[403.76110881   0. 288.        ]; ...
- [  0.    403.76110881 216.        ]; ...
- [  0.       0.           1.        ]];
-fov_gt = 71.0;
+K_gt = [[403.76110881   0.    288.]; ...
+        [  0.    403.76110881 216.]; ...
+        [  0.       0.         1. ]];
+    
+fov_gt        = 71.0;
 camera_height = 7.692022323608398;
-pitch_gt = -16.022058486938477;
-yaw_gt = 24.999956130981445;
-roll_gt = -5.862370014190674;
-image_width = 576;
-image_height = 432;
-
-% vps_gt = [[-3177.8156919   -176.18515848]; ...
-%  [  319.23931061     4.49912707]; ...
-%  [  249.04268972   621.61837748]];
-% K_gt = [[294.65329529   0.         270.        ]; ...
-%  [  0.         294.65329529 216.        ]; ...
-%  [  0.           0.           1.        ]];
-% 
-% camera_height = 19.580541610717773;
-% pitch_gt = -35.95946502685547;
-% yaw_gt = -6.000004291534424;
-% roll_gt = -2.957702875137329;
-% image_width = 540;
-% image_height = 432;
+pitch_gt      = -16.022058486938477;
+yaw_gt        = 24.999956130981445;
+roll_gt       = -5.862370014190674;
+image_width   = 576;
+image_height  = 432;
 
 %Rot_gt = rpy2r(roll_gt,pitch_gt,yaw_gt,'deg','camera');
 Rot_gt = rpy2r(roll_gt,pitch_gt,yaw_gt,'deg','yxz');
-Rot_gt_roll_pitch = rpy2r(roll_gt,pitch_gt,0,'deg','yxz')
+%Rot_gt_roll_pitch = rpy2r(roll_gt,pitch_gt,0,'deg','yxz')
 Rot_gt_inv = Rot_gt';
 
-% % % %thetax = deg2rad(pitch_gt);
-% % % 
-% % % thetax = deg2rad(roll_gt);
-% % % Rx_gt = [ 1  0 0;
-% % %     0 cos(thetax) -sin(thetax);
-% % %     0 sin(thetax) cos(thetax)];
-% % % 
-% % % %thetay = deg2rad(yaw_gt);
-% % % thetay = deg2rad(pitch_gt);
-% % % Ry_gt = [cos(thetay) 0 sin(thetay);
-% % %     0 1 0;
-% % %     -sin(thetay) 0 cos(thetay)];
-% % % 
-% % % %thetaz = deg2rad(roll_gt);
-% % % thetaz = deg2rad(yaw_gt);
-% % % Rz_gt = [ cos(thetaz) -sin(thetaz) 0;
-% % %     sin(thetaz) cos(thetaz) 0;
-% % %     0 0 1];
-% % % 
-% % % Rot_gt = Rz_gt* Ry_gt * Rx_gt;
-% % % %Rot_gt = Rx_gt * Ry_gt * Ry_gt;
-% % % %Rot_gt = Rz_gt * Rx_gt;
+Tcam = transl(0,0,camera_height)...
+       *trotx(-90,'deg')...
+       *troty(yaw_gt,'deg')...
+       *trotx(pitch_gt,'deg')...
+       *trotz(roll_gt,'deg');
+   
+cam = CentralCamera('focal', 0.015,'pixel',10e-6, ...
+     'resolution',[1280 1024],'centre',[640 512],'pose',Tcam);
+world = SE3();
+trplot(world,'frame','0','color','b');
+cam.plot_camera();
+xlim([-1 5]);
+ylim([-1 5]);
+zlim([-1 10]);
 
 %check vanishing points from rotation matrix
 vvv1 = K_gt*Rot_gt_inv(:,1);
-vvv1 = vvv1/vvv1(3)
+vvv1 = vvv1/vvv1(3);
+vvv1'
+gt_vp1 = vps_gt(1,:)
+
 vvv2 = K_gt*Rot_gt_inv(:,2);
-vvv2 = vvv2/vvv2(3)
+vvv2 = vvv2/vvv2(3);
+vvv2'
+gt_vp2 = vps_gt(2,:)
+
 vvv3 = K_gt*Rot_gt_inv(:,3);
-vvv3 = vvv3/vvv3(3)
+vvv3 = vvv3/vvv3(3);
+vvv3'
+gt_vp3 = vps_gt(3,:)
 
 % open image
 I = imread('town_1_frame_1268.png');
@@ -112,7 +99,7 @@ Rx = [ 1  0 0;
     0 cos(theta_x) -sin(theta_x);
     0 sin(theta_x) cos(theta_x)];
 
-RotM = Rx*Rz
+%%%RotM = Rx*Rz
 
 % Compute directly rotation matrix columns
 % It doesn't seem to work
@@ -120,10 +107,11 @@ RotM = Rx*Rz
 r1 = (inv(K_gt)*[vps_gt(1,:),1]')/norm(inv(K_gt)*[vps_gt(1,:),1]'); 
 r2 = (inv(K_gt)*[vps_gt(2,:),1]')/norm(inv(K_gt)*[vps_gt(2,:),1]');
 r3 = cross(r1,r2);
-RotM_2 = [r1,r2,r3]
+RotM_2 = [r1,r2,r3]'
 
 Rot_gt
-Rot_gt_roll_pitch
+cam.T
+%Rot_gt_roll_pitch
 
 
 % % % %Compute Homography??
