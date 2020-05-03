@@ -17,9 +17,10 @@ roll_gt       = -5.862370014190674;
 image_width   = 576;
 image_height  = 432;
 
-%Rot_gt = rpy2r(roll_gt,pitch_gt,yaw_gt,'deg','camera');
-Rot_gt = rpy2r(roll_gt,pitch_gt,yaw_gt,'deg','yxz');
-%Rot_gt_roll_pitch = rpy2r(roll_gt,pitch_gt,0,'deg','yxz')
+Rot_gt = rotx(-90,'deg')...
+         *roty(yaw_gt,'deg')...
+         *rotx(pitch_gt,'deg')...
+         *rotz(roll_gt,'deg');
 Rot_gt_inv = Rot_gt';
 
 Tcam = transl(0,0,camera_height)...
@@ -33,6 +34,14 @@ cam = CentralCamera('focal', 0.015,'pixel',10e-6, ...
 world = SE3();
 trplot(world,'frame','0','color','b');
 cam.plot_camera();
+
+%% Second camera
+Tcam2 = Tcam * trotz(roll_gt,'deg') * trotx(-90-pitch_gt,'deg');
+   
+cam2 = CentralCamera('focal', 0.015,'pixel',10e-6, ...
+     'resolution',[1280 1024],'centre',[640 512],'pose',Tcam2);
+
+cam2.plot_camera('color','r');
 xlim([-1 5]);
 ylim([-1 5]);
 zlim([-1 10]);
@@ -55,8 +64,9 @@ gt_vp3 = vps_gt(3,:)
 
 % open image
 I = imread('town_1_frame_1268.png');
-%I = imread('town_1_frame_2098.png');
-% imshow(I);
+I = insertShape(I,'Line',[vps_gt(1,1) vps_gt(1,2) vps_gt(2,1) vps_gt(2,2)],...
+    'LineWidth',2,'Color','blue');
+ imshow(I);
 % hold on
 
 % Plot vanishing points
@@ -102,8 +112,6 @@ Rx = [ 1  0 0;
 %%%RotM = Rx*Rz
 
 % Compute directly rotation matrix columns
-% It doesn't seem to work
-% wrongly compute vanishing points?
 r1 = (inv(K_gt)*[vps_gt(1,:),1]')/norm(inv(K_gt)*[vps_gt(1,:),1]'); 
 r2 = (inv(K_gt)*[vps_gt(2,:),1]')/norm(inv(K_gt)*[vps_gt(2,:),1]');
 r3 = cross(r1,r2);
@@ -111,17 +119,17 @@ RotM_2 = [r1,r2,r3]'
 
 Rot_gt
 cam.T
-%Rot_gt_roll_pitch
-
 
 % % % %Compute Homography??
-% % %Hrot = K_gt*inv(Rx_gt)*inv(K_gt)*inv(Rz_gt);
-% % Hrot = K_gt*Rx*inv(K_gt)*Rz;
-% % 
-% % %Hrot = inv(Rz_gt) * inv(Rx_gt);
-% % 
+
+Hrot = K_gt ... 
+       *rotx(90+pitch_gt,'deg')...
+       *inv(K_gt)... 
+       *rotz(roll_gt,'deg');
+   
 % % % % apply rotation to the image plane
-% % tform = projective2d(Hrot');
-% % imout = imwarp(I,tform);
+figure;
+tform = projective2d(Hrot');
+imout = imwarp(I,tform);
 % % figure;
-% % imshow(imout);
+imshow(imout);
