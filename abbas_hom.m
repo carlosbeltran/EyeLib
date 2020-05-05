@@ -1,5 +1,7 @@
 clear all; close all;
 
+% Dependency on Peter Corke Toolboxes (Machine Vision and Robotics)
+
 %% Groundtruth
 vps_gt = [[ 1195.99492678  192.67503264]; ...
           [ 104.98138221   80.65389521]; ...
@@ -35,31 +37,27 @@ world = SE3();
 trplot(world,'frame','0','color','b');
 cam.plot_camera();
 
-%% Second camera
-Tcam2 = Tcam * trotz(roll_gt,'deg') * trotx(-90-pitch_gt,'deg');
-   
-cam2 = CentralCamera('focal', 0.015,'pixel',10e-6, ...
-     'resolution',[1280 1024],'centre',[640 512],'pose',Tcam2);
-
-cam2.plot_camera('color','r');
 xlim([-1 5]);
 ylim([-1 5]);
 zlim([-1 10]);
 
+% Get intrinsics matrix K from vanishing points
+vpx = vps_gt(1,:);
+vpy = vps_gt(2,:);
+vpz = vps_gt(3,:);
+K = getKfromVanishingPoints(vpx,vpy,vpz);
+
 %check vanishing points from rotation matrix
 vvv1 = K_gt*Rot_gt_inv(:,1);
-vvv1 = vvv1/vvv1(3);
-vvv1'
+vvv1 = h2e(vvv1)'
 gt_vp1 = vps_gt(1,:)
 
 vvv2 = K_gt*Rot_gt_inv(:,2);
-vvv2 = vvv2/vvv2(3);
-vvv2'
+vvv2 = h2e(vvv2)'
 gt_vp2 = vps_gt(2,:)
 
 vvv3 = K_gt*Rot_gt_inv(:,3);
-vvv3 = vvv3/vvv3(3);
-vvv3'
+vvv3 = h2e(vvv3)
 gt_vp3 = vps_gt(3,:)
 
 % open image
@@ -82,53 +80,44 @@ theta_z = atan(-horizon(1)/horizon(2));
 roll_deg = rad2deg(theta_z);
 roll_gt;
 
-%Rotation matrix on z axis
-Rz = [ cos(theta_z) -sin(theta_z) 0;
-    sin(theta_z) cos(theta_z) 0;
-    0 0 1];
+% %Rotation matrix on z axis
+% Rz = [ cos(theta_z) -sin(theta_z) 0;
+%     sin(theta_z) cos(theta_z) 0;
+%     0 0 1];
 
-% compute x rotation (tilt) [ this doesn't seem to work, error in stimated
-% angle ]
-theta_x = (pi/2.0) - atan(norm([vps_gt(3,:)])/K_gt(1));
-tild_deg = rad2deg(theta_x);
-pitch_gt;
+% % compute x rotation (tilt) [ this doesn't seem to work, error in stimated
+% % angle ]
+% theta_x = (pi/2.0) - atan(norm([vps_gt(3,:)])/K_gt(1));
+% tild_deg = rad2deg(theta_x);
+% pitch_gt;
 
-% instead trying to get the pitch angle from the Image of The Absolute Conic (IAC)
-% using the camera center vector and the vertical vanishing point (vps3_gt)
-% check page 210 of Hartley and Zisserman " Multiple View Geometry in
-% computer vision" [second edition]
-x1  = K_gt(:,3); % Image centre (first image point)
-iac = inv(K_gt*K_gt'); %Image of the absolute conic
-x2  = [vps_gt(3,:),1]'; % Vanishing point (second image point)
-costheta = (x1'*iac*x2)/(sqrt(x1'*iac*x1)*sqrt(x2'*iac*x2));
-pitch_iac = rad2deg(pi/2 - acos(costheta));
+% Get Pitch using the IAC by means of the intrinsics matrix K and the
+% vertical vanishg point
+pitch_iac = getPitchByIAC(K,vps_gt(3,:));
 
-theta_x = pi/2 - acos(costheta);
-
-Rx = [ 1  0 0;
-    0 cos(theta_x) -sin(theta_x);
-    0 sin(theta_x) cos(theta_x)];
-
-%%%RotM = Rx*Rz
-
-% Compute directly rotation matrix columns
+% Check the rotation matrix using the vanishing points
 r1 = (inv(K_gt)*[vps_gt(1,:),1]')/norm(inv(K_gt)*[vps_gt(1,:),1]'); 
 r2 = (inv(K_gt)*[vps_gt(2,:),1]')/norm(inv(K_gt)*[vps_gt(2,:),1]');
 r3 = cross(r1,r2);
 RotM_2 = [r1,r2,r3]'
 
-Rot_gt
-cam.T
+% Rot_gt
+% cam.T
 
-% % % %Compute Homography??
 
-Hrot = K_gt ... 
+%% compute homograpy
+Hrot_gt = K_gt ... 
        *rotx(90+pitch_gt,'deg')...
        *inv(K_gt)... 
        *rotz(roll_gt,'deg');
+
+Hrot = K ... 
+       *rotx(90-pitch_iac,'deg')... %% Pitch
+       *inv(K)... 
+       *rotz(-roll_deg,'deg');
    
 % compute traslation
-frame_width = image_width;
+frame_width  = image_width;
 frame_height = image_height;
 
 tlc = [0, 0];
@@ -137,28 +126,29 @@ blc = [0, frame_height];
 brc = [frame_width, frame_height];
 
 P1 = horzcat(tlc',trc',blc',brc');
-P2 = homtrans(inv(Hrot), P1)
+P2 = homtrans(inv(Hrot), P1);
 
 xmin = min(P2(1,:));
 xmax = max(P2(1,:));
 ymin = min(P2(2,:));
 ymax = max(P2(2,:));
 
-t = [[1, 0, -xmin]; 
+Tscene = [[1, 0, -xmin]; 
      [0, 1, -ymin];
      [0, 0, 1]];
-      
-Hrot = rotz(20,'deg') * t* Hrot;
+ 
+Ralign = rotz(20,'deg');
+Hrot_final = Ralign * Tscene * Hrot;
 
 cb_ref = imref2d(size(I))
 cb_translated_ref = cb_ref;
-cb_translated_ref.XWorldLimits(1) = cb_translated_ref.XWorldLimits(1)-1000;
+cb_translated_ref.XWorldLimits(1) = cb_translated_ref.XWorldLimits(1)-500;
 cb_translated_ref.YWorldLimits(1) = cb_translated_ref.YWorldLimits(1)-2000;
 cb_translated_ref.XWorldLimits(2) = cb_translated_ref.XWorldLimits(2)+1500;
 cb_translated_ref.YWorldLimits(2) = cb_translated_ref.YWorldLimits(2)+1500;
 % % % % apply rototranslation to the image plane
 figure;
-tform = projective2d(Hrot');
+tform = projective2d(Hrot_final');
 [imout,trans_ref] = imwarp(I,tform,'OutputView',cb_translated_ref);
 % % figure;
 imshow(imout,trans_ref);
