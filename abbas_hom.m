@@ -127,9 +127,40 @@ Hrot = K_gt ...
        *inv(K_gt)... 
        *rotz(roll_gt,'deg');
    
-% % % % apply rotation to the image plane
+% compute traslation
+frame_width = image_width;
+frame_height = image_height;
+
+tlc = [0, 0];
+trc = [frame_width, 0];
+blc = [0, frame_height];
+brc = [frame_width, frame_height];
+
+P1 = horzcat(tlc',trc',blc',brc');
+P2 = homtrans(inv(Hrot), P1)
+
+xmin = min(P2(1,:));
+xmax = max(P2(1,:));
+ymin = min(P2(2,:));
+ymax = max(P2(2,:));
+
+t = [[1, 0, -xmin]; 
+     [0, 1, -ymin];
+     [0, 0, 1]];
+      
+Hrot = rotz(20,'deg') * t* Hrot;
+
+cb_ref = imref2d(size(I))
+cb_translated_ref = cb_ref;
+cb_translated_ref.XWorldLimits(1) = cb_translated_ref.XWorldLimits(1)-1000;
+cb_translated_ref.YWorldLimits(1) = cb_translated_ref.YWorldLimits(1)-2000;
+cb_translated_ref.XWorldLimits(2) = cb_translated_ref.XWorldLimits(2)+1500;
+cb_translated_ref.YWorldLimits(2) = cb_translated_ref.YWorldLimits(2)+1500;
+% % % % apply rototranslation to the image plane
 figure;
 tform = projective2d(Hrot');
-imout = imwarp(I,tform);
+[imout,trans_ref] = imwarp(I,tform,'OutputView',cb_translated_ref);
 % % figure;
-imshow(imout);
+imshow(imout,trans_ref);
+hold on;
+% plot(P2(1,:),P2(2,:),'*r');
