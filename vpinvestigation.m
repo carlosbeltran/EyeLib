@@ -1,4 +1,5 @@
 clear all; close all;
+addpath('./external');
 
 % Plot word coordinate frame
 Tcam = transl(0,0,1)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-45));
@@ -67,4 +68,6 @@ Rest   = computeRviaVanishingPointsandK(cam.K,vv1,vv2)
 
 K = computeKviaIAC(vv1,vv2,vv3)
 cam.K
+assert(all(all(isalmost(K,cam.K,1e-10))),"Comparison of K matrices")
+
    
