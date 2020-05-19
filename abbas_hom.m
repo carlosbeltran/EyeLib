@@ -45,7 +45,8 @@ zlim([-1 10]);
 vpx = vps_gt(1,:);
 vpy = vps_gt(2,:);
 vpz = vps_gt(3,:);
-K = getKfromVanishingPoints(vpx,vpy,vpz);
+%K = getKfromVanishingPoints(vpx,vpy,vpz);
+K = computeKviaIAC([vpx,1],[vpy,1],[vpz,1]);
 
 %check vanishing points from rotation matrix
 vvv1 = K_gt*Rot_gt_inv(:,1);
