@@ -52,22 +52,26 @@ vp2 = vp2/vp2(3)
 plot(vp1(1)/vp1(3),vp1(2)/vp1(3),'*r');
 plot(vp2(1)/vp2(3),vp2(2)/vp2(3),'*y');
 
-rot = cam.T.R;
-rot = rot';
+rot = cam.T.R; % rotaton part of the "pose" of the camera wRc
+rot = rot'; % getting cRw
 vv1 = cam.K * rot(:,1);
 vv1 = vv1/vv1(3)
 vv2 = cam.K * rot(:,2);
 vv2 = vv2/vv2(3)
 vv3 = cam.K * rot(:,3);
 vv3 = vv3/vv3(3)
-rot
-r1 = (inv(cam.K)*vp1')/norm((inv(cam.K)*vp1'))
-r2 = (inv(cam.K)*vp2')/norm((inv(cam.K)*vp2'))
-r3 = cross(r1,r2)
+
+%r1 = (inv(cam.K)*vv1)/norm((inv(cam.K)*vv1))
+%r2 = (inv(cam.K)*vv2)/norm((inv(cam.K)*vv2))
+%r3 = cross(r1,r2)
+
+cRw_gt = cam.T.R'
+Rest = computeRviaVanishingPointsandK(cam.K,vv1,vv2)
 
 %% Calculate focal length
 
-K = getKfromVanishingPoints(vv1,vv2,vv3);
-K
+%K = getKfromVanishingPoints(vv1,vv2,vv3);
+
+K = computeKviaIAC(vv1,vv2,vv3)
 cam.K
    
