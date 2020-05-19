@@ -25,8 +25,11 @@ function test = isalmost(a,b,tol)
 %
 %   author : James Crawford 
 %   created 01/08/2007
+%   modified by: Carlos Beltran-Gonzalez
+%
 %
 %   history: v1.0 (01/08/2007)
+%   history  v2.0 (19/05/2020) 
 %
 % get length of input matrix a
 [nr,nc] = size(a);
@@ -43,4 +46,5 @@ end
 one = ones(size(b));
 % perform test
 test = (a <= b+tol*one)&(a >= b-tol*one);
+test = all(all(test));
 %

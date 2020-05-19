@@ -68,6 +68,6 @@ Rest   = computeRviaVanishingPointsandK(cam.K,vv1,vv2)
 
 K = computeKviaIAC(vv1,vv2,vv3)
 cam.K
-assert(all(all(isalmost(K,cam.K,1e-10))),"Comparison of K matrices")
+assert(isalmost(K,cam.K,1e-10),"Comparison of K matrices")
 
    
