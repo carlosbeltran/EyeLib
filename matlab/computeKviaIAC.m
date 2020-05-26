@@ -39,17 +39,8 @@
 % Istituto Italiano di Tecnologia
 % Pattern Analysis and Computer Vision
 % $Date:  May 16, 2020$
-% Copyright: 
-% Creative Commons Attribution-NonCommercial 4.0 International 
-% (CC BY-NC 4.0) plus
-% THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
-% OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-% FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-% THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
-% OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
-% ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR 
-% OTHER DEALINGS IN THE SOFTWARE.
-%
+% Copyright (C) 2020 Carlos Beltran-Gonzalez
+% CopyPolicy: GNU Lesser General Public License v3
 %---------------------------------------------------------
 
 function [K,W] = computeKviaIAC(vp1,vp2,vp3)

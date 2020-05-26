@@ -14,6 +14,8 @@
 % Istituto Italiano di Tecnologia
 % Pattern Analysis and Computer Vision
 % $Date:  May 16, 2020$
+% Copyright (C) 2020 Carlos Beltran-Gonzalez
+% CopyPolicy: GNU Lesser General Public License v3
 
 function pitchDeg = getPitchByIAC(K,verticalvp)
 

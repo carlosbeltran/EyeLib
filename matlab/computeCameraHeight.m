@@ -10,6 +10,8 @@
 % Istituto Italiano di Tecnologia
 % Pattern Analysis and Computer Vision
 % $Date:  May 26, 2020$
+% Copyright (C) 2020 Carlos Beltran-Gonzalez
+% CopyPolicy: GNU Lesser General Public License v3
 
 function Z = computeCameraHeight(v1,v2,v3,b,t,Zt)
 
