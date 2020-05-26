@@ -1,4 +1,29 @@
-# VPInvestigation
-Trying to get an implementation of the first part of Abbas and Zisserman ICCVW19 paper "A Geometric Approach to Obtain a Bird’s Eye View from an Image"
+# The EYELib
 
-https://arxiv.org/pdf/1905.02231.pdf
+A library for unifying a clean and straight forward implementation -in matlab
+and python- of the most common (and not so common) algorithms and techniques 
+used for Single View Metrology. 
+
+These algorithms are broadly explained in advanced courses of computer 
+vision, books and papers, however, open source implementations of such 
+algorithms are very scarce or simply don't exist. 
+
+The library depends heavily on vanishing points. The stress is on what can 
+be done with the vanishing points not on obtaining them.  The EYELib assumes 
+that vanishing points are provided by a third party library. 
+
+Follows a list of stuff implemented so far (trying to keep this updated):
+- Implementation of the first part of Abbas and Zisserman ICCVW19 paper 
+"A Geometric Approach to Obtain a Bird’s Eye View from an Image"
+- Attempt to implement 4-D SCENE ALIGNMENT IN SURVEILLANCE VIDEO by
+RobertWagner, Daniel Crispell, Patrick Feeney, Joe Mundy
+- Implementation of pitch angle angle calculation using the Image of the 
+Absolute Conic. See "Multiple view Geometry in Computer Vision" by Harley 
+and Zissermanequation 8.9 pag 210 Second Edition.
+- Implementation of algorithm "Calibration from three orthogonal vanishing 
+points".  See "Multiple view Geometry in Computer Vision" by Harley and 
+Zisserman Example 8.27 pag 225-226 Second Edition.
+- Implementation of camera height calculation. SeeCriminisi, A., Reid, I. &
+ Zisserman, A. Single View Metrology. International Journal of Computer 
+Vision 40, 123–148 (2000). https://doi.org/10.1023/A:1026598000963
+- Implementation of rotation matrix from vanishing points and viceversa.
