@@ -1,0 +1,19 @@
+ #camera
+T_camera = carla.Transform(carla.Location(x=65.384514, y=-56.747856, z=12), carla.Rotation(pitch=-30, yaw=151, roll=0))
+#walker
+T_walker1 = carla.Transform(carla.Location(x=58.883602, y=-50.814964, z=8.829111), carla.Rotation(pitch=-13.618502, yaw=-26.884417, roll=0.000033))
+T_walker2 = carla.Transform(carla.Location(x=63.062401, y=-54.493992, z=8.822564), carla.Rotation(pitch=-6.612490, yaw=-20.266428, roll=0.000036))
+T_walker3 = carla.Transform(carla.Location(x=53.883602, y=-51.814964, z=8.829111), carla.Rotation(pitch=-13.618502, yaw=-28.884417, roll=0.000033))
+T_walker4 = carla.Transform(carla.Location(x=56.062401, y=-55.493992, z=8.822564), carla.Rotation(pitch=-6.612490, yaw=-25.266428, roll=0.000036))
+T_walker5 = carla.Transform(carla.Location(x=61.062401, y=-50.493992, z=8.822564), carla.Rotation(pitch=-6.612490, yaw=-5.266428, roll=0.000036))
+
+fov = 71
+
+image_width   = 576;
+image_height  = 432;
+
+K = [[403.76110881   0.         288. ]
+    [  0.         403.76110881 216.  ]
+    [  0.           0.           1. ]]
+
+Transform(Location(x=65.384514, y=-56.747856, z=12.000000), Rotation(pitch=-30.000000, yaw=151.000031, roll=0.000000))
