@@ -14,7 +14,7 @@ trplot(world,'frame','0','color','b');
 
 xlim([-1 5]);
 ylim([-1 5]);
-zlim([-0.1 5]);
+zlim([-0.1 5.5]);
 
 % plot camera
 cam.plot_camera();
@@ -41,13 +41,15 @@ R = R';
 K = cam.K
 [v1,v2,v3] = computeVanishingPointsviaRandK(R,K);
 
-hoz    = cross(v1,v2);
-btLine = cross(b,t);
-i      = cross(btLine,hoz);
-i = i/i(3);
+Zc = computeCameraHeight(v1,v2,v3,b,t,Zt);
 
-hoznor = hoz/norm(hoz);
-
-alpha = (-norm(cross(b,t)))/(dot(hoznor,b)*norm(cross(v3,t))*Zt)
-Zc    = (-norm(cross(b,i)))/(dot(hoznor,b)*norm(cross(v3,i))*alpha)
-Zc2   = -(inv(dot(hoznor,v3)))/alpha
+% hoz    = cross(v1,v2);
+% btLine = cross(b,t);
+% i      = cross(btLine,hoz);
+% i = i/i(3);
+% 
+% hoznor = hoz/norm(hoz);
+% 
+% alpha = (-norm(cross(b,t)))/(dot(hoznor,b)*norm(cross(v3,t))*Zt)
+% Zc    = (-norm(cross(b,i)))/(dot(hoznor,b)*norm(cross(v3,i))*alpha)
+% Zc2   = -(inv(dot(hoznor,v3)))/alpha
