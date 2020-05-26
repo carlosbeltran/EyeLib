@@ -63,6 +63,7 @@ vvv3 = h2e(vvv3)
 gt_vp3 = vps_gt(3,:)
 
 % open image
+f1 = figure(1);
 I = imread('./syntheticdata/town_1_frame_1268.png');
 I = insertShape(I,'Line',[vps_gt(1,1) vps_gt(1,2) vps_gt(2,1) vps_gt(2,2)],...
     'LineWidth',2,'Color','blue');
@@ -155,4 +156,26 @@ tform = projective2d(Hrot_final');
 % % figure;
 imshow(imout,trans_ref);
 hold on;
-% plot(P2(1,:),P2(2,:),'*r');
+
+figure(f1);
+pt = [772;1555];
+cir = circle(pt, 50);
+pt = e2h(pt);
+orig_pt = inv(Hrot_final)*pt;
+orig_pt = h2e(orig_pt);
+orig_elip = inv(Hrot_final)*e2h(cir);
+orig_elip = h2e(orig_elip);
+imshow(I);hold on;
+plot(orig_pt(1,:),orig_pt(2,:),'*r');
+plot(orig_elip(1,:),orig_elip(2,:),'-g');
+
+% Just with rotations (no translation no aligment)
+pt      = [361;338];
+pt      = e2h(pt);
+dst_pt  = Hrot*pt;
+dst_pt  = h2e(dst_pt);
+dst_cir = circle(dst_pt, 50);
+elip    = inv(Hrot)* e2h(dst_cir);
+elip    = h2e(elip);
+plot(elip(1,:),elip(2,:),'-r');
+
