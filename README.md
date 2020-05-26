@@ -34,3 +34,8 @@ Vision 40, 123–148 (2000). https://doi.org/10.1023/A:1026598000963
 P.I. Corke, “Robotics, Vision & Control”, Springer 2011, ISBN 978-3-642-20143-1. 
 - The library also depends on the David Legland geom3d library:
 David Legland (2020). geom3d (https://www.mathworks.com/matlabcentral/fileexchange/24484-geom3d), MATLAB Central File Exchange. Retrieved May 26, 2020.
+
+## Disclaimer
+
+Notice that, in principle, the library is not dealing with distortion or image noise issues. For testing, the library will be using synthetic images or ideal (very low distortion-noisy) images.
+Actually, the final purpose of the library is to provide a semi-automatic or eventually automatic way of extracting the geometry from a single image. Notice that this will highly depend on the quality of vanishing points or distortion estimation based on third party libraries. Ideally, in some near future the library may converge into deep learning approaches.
