@@ -1,4 +1,5 @@
 clear all; close all;
+addpath('./matlab');
 
 Zc_gt = 5.2;
 Zt    = 1.8;

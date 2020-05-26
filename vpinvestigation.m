@@ -1,5 +1,6 @@
 clear all; close all;
 addpath('./external');
+addpath('./matlab');
 
 % Plot word coordinate frame
 Tcam = transl(0,0,1)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-45));

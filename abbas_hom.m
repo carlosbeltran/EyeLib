@@ -1,4 +1,5 @@
 clear all; close all;
+addpath('./matlab');
 
 % Dependency on Peter Corke Toolboxes (Machine Vision and Robotics)
 
@@ -62,7 +63,7 @@ vvv3 = h2e(vvv3)
 gt_vp3 = vps_gt(3,:)
 
 % open image
-I = imread('town_1_frame_1268.png');
+I = imread('./syntheticdata/town_1_frame_1268.png');
 I = insertShape(I,'Line',[vps_gt(1,1) vps_gt(1,2) vps_gt(2,1) vps_gt(2,2)],...
     'LineWidth',2,'Color','blue');
  imshow(I);
