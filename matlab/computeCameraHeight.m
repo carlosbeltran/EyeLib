@@ -1,7 +1,18 @@
-function Z = computeCameraHeight(v1,v2,v3,b,t,Zt)
+%% Function Name: computeCameraHeight
+% 
 % Gets the camera height from the vanishing points and the height of a
 % reference object with known botton and top image projections
 % REFERENCE: Criminisi, Reid and Zisserman. Single View Metrology. 1999
+%
+% $Revision: v1.0$ 
+% $Author: Carlos Beltran-Gonzalez$
+% $Email: carlos.beltran@iit.it$
+% Istituto Italiano di Tecnologia
+% Pattern Analysis and Computer Vision
+% $Date:  May 26, 2020$
+
+function Z = computeCameraHeight(v1,v2,v3,b,t,Zt)
+
 
 hoz    = cross(v1,v2); % Get the horizon line
 
