@@ -2,7 +2,7 @@
 
 A library for unifying a clean and straight forward implementation -in matlab
 and python- of the most common (and not so common) algorithms and techniques 
-used for Single View Metrology. 
+used for Single View Metrology and one image self/auto calibration.
 
 These algorithms are broadly explained in advanced courses of computer 
 vision, books and papers, however, open source implementations of such 
