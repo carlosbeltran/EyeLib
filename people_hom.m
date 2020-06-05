@@ -56,7 +56,7 @@ vpz = vps_gt(3,:);
 K   = computeKviaIAC([vpx,1],[vpy,1],[vpz,1]);
 
 % open image
-f1 = figure(1);
+f1 = figure(2);
 I = imread('./syntheticdata/people_01.png');
 I = insertShape(I,'Line',[vps_gt(1,1) vps_gt(1,2) vps_gt(2,1) vps_gt(2,2)],...
     'LineWidth',2,'Color','blue');
