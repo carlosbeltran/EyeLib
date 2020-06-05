@@ -68,25 +68,26 @@ p2 = [xx(2),yy(2)];
 p3 = [xx(3),yy(3)];
 p4 = [xx(4),yy(4)];
 hold on
-plot(p1(1),p1(2),'*r');
-plot(p2(1),p2(2),'*r');
-plot(p3(1),p3(2),'*y');
-plot(p4(1),p4(2),'*y');
+plot(p1(1),p1(2),'*g');
+plot(p2(1),p2(2),'*g');
+plot(p3(1),p3(2),'*r');
+plot(p4(1),p4(2),'*r');
 
 line1 = cross([p1,1],[p2,1]);
-plot(xx(1:2),yy(1:2),'-r');
+plot(xx(1:2),yy(1:2),'-g');
 line2 = cross([p4,1],[p3,1]);
-plot([xx(4);xx(3)],[yy(4);yy(3)],'-r');
+plot([xx(4);xx(3)],[yy(4);yy(3)],'-g');
 
 line3 = cross([p4,1],[p1,1]);
-plot([xx(4);xx(1)],[yy(4);yy(1)],'-y');
+plot([xx(4);xx(1)],[yy(4);yy(1)],'-r');
 line4 = cross([p3,1],[p2,1]);
-plot([xx(3);xx(2)],[yy(3);yy(2)],'-y');
+plot([xx(3);xx(2)],[yy(3);yy(2)],'-r');
 
-vp1 = cross(line1,line2);
-vp2 = cross(line3,line4);
+vp1 = cross(line3,line4);
+vp2 = cross(line1,line2);
 vp1 = vp1/vp1(3)
 vp2 = vp2/vp2(3)
+
 %plot(vp1(1)/vp1(3),vp1(2)/vp1(3),'*r');
 %plot(vp2(1)/vp2(3),vp2(2)/vp2(3),'*y');
 
