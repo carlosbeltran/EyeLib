@@ -39,20 +39,22 @@ p8 = [pts(8,:),1];
 
 % X direction vanising point
 line1_4 = cross(p1,p4);
-plot([xx(1);xx(4)],[yy(1);yy(4)],'-g','LineWidth',5);
+plot([xx(1);xx(4)],[yy(1);yy(4)],'-r','LineWidth',5);
 line2_3 = cross(p2,p3);
-plot([xx(2);xx(3)],[yy(2);yy(3)],'-g','LineWidth',5);
+plot([xx(2);xx(3)],[yy(2);yy(3)],'-r','LineWidth',5);
 
 vp1 = cross(line1_4,line2_3);
+vp1 = vp1/vp1(3);
 v1 = h2e(vp1);
 
 % Y direction vanising point
 line1_2 = cross(p1,p2);
-plot([xx(1);xx(2)],[yy(1);yy(2)],'-r','LineWidth',5);
+plot([xx(1);xx(2)],[yy(1);yy(2)],'-g','LineWidth',5);
 line4_3 = cross(p4,p3);
-plot([xx(4);xx(3)],[yy(4);yy(3)],'-r','LineWidth',5);
+plot([xx(4);xx(3)],[yy(4);yy(3)],'-g','LineWidth',5);
 
 vp2 = cross(line1_2,line4_3);
+vp2 = vp2/vp2(3);
 v2 = h2e(vp2);
 
 % Z direction vanising point
@@ -62,12 +64,8 @@ line7_8 = cross(p7,p8);
 plot([xx(7);xx(8)],[yy(7);yy(8)],'-b','LineWidth',5);
 
 vp3 = cross(line5_6,line7_8);
+vp3 = vp3/vp3(3);
 v3 = h2e(vp3);
-
-%Switch x an y
-vp1_tmp = vp1;
-vp1 = vp2;
-vp2 = vp1_tmp;
 
 %Compute calibration matrix
 %
@@ -83,7 +81,7 @@ Rest   = computeRviaVanishingPointsandK(K,vp1',vp2')
 figure(2);
 Camheigh_guess = 3 ; % 3 meters
 Tcam = transl(0,0,Camheigh_guess)...
-       *r2t(Rest);
+       *r2t(Rest');
 cam = CentralCamera('focal', f, ...
      'resolution',[2048 1536],'centre',[u0 v0],'pose',Tcam);
 world = SE3();

@@ -3,8 +3,8 @@ addpath('./external');
 addpath('./matlab');
 
 % Plot word coordinate frame
-%Tcam = transl(0,0,3)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-45));
-Tcam = transl(0,0,0.5)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-5));
+Tcam = transl(0,0,3)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-45));
+%Tcam = transl(0,0,0.5)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-5));
 %Tcam = transl(0,0,8)*trotx(deg2rad(-90))*troty(deg2rad(45))*trotx(deg2rad(-60));
 
 
@@ -148,3 +148,6 @@ plot(elip(1,:),elip(2,:),'-r');
 
 plot(gt_elipse(1,:),gt_elipse(2,:),'-g');
 
+plot(vv1(1),vv1(2),'*r');
+plot(vv2(1),vv2(2),'*g');
+plot(vv3(1),vv3(2),'*b');
