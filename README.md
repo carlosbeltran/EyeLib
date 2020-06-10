@@ -31,7 +31,7 @@ Vision 40, 123–148 (2000). https://doi.org/10.1023/A:1026598000963
 ## Dependencies
 
 - The library depends frequently on Peter Corke toolboxes
-P.I. Corke, “Robotics, Vision & Control”, Springer 2011, ISBN 978-3-642-20143-1. **Important: notice that the paths to these toolboxes must be inserted on top of your matlab "setpath". Otherwise, there are some conflics with preessinting matlab rutines.**
+P.I. Corke, “Robotics, Vision & Control”, Springer 2011, ISBN 978-3-642-20143-1. **Important: notice that the paths to these toolboxes must be inserted on top of your matlab "setpath". Otherwise, there are some conflics with preessinting matlab rutines. Tested with Machine Vision toolbox on top followed by Robotics Toolbox**
 - The library also depends on the David Legland geom3d library:
 David Legland (2020). geom3d (https://www.mathworks.com/matlabcentral/fileexchange/24484-geom3d), MATLAB Central File Exchange. Retrieved May 26, 2020.
 
